@@ -1,0 +1,66 @@
+//CONSULTAS
+
+//SELECT
+//Obtiene Nombre, Rut, ID del Paquete y Valor del pago del cliente donde el valor sea mayor a $600.000 CLP
+select cliente.Nombre, cliente.Rut, cliente.ID_Paquete, pago.Valor from cliente inner join pago on cliente.Rut = pago.Rut where pago.Valor > 600000;
+π cliente.nombre, cliente.rut, cliente.id_paquete, pago.valor
+ σ pago.valor > 600000 (cliente ⋈ cliente.rut = pago.rut pago)
+
+//Obtenemos ID de la ruta, pais origen y destino y el modelo de avion utilizado en esa ruta
+select ruta.ID_Ruta, ruta.Pais_Origen, ruta.Pais_Destino, vuelo.modeloAvion from ruta inner join vuelo on ruta.ID_Ruta = vuelo.ID_Ruta;
+π ruta.id_ruta, ruta.pais_origen, ruta.pais_destino, vuelo.modeloavion (ruta ⋈ ruta.id_ruta = vuelo.id_ruta vuelo)
+
+//Obtenemos los vuelos que ocupen algun modelo de avion que soporte 500 o mas pasajeros;
+select ID_Vuelo, modeloAvion, Capacidad from vuelo where capacidad >= 500;
+π id_vuelo, modeloavion, capacidad
+ σ capacidad >= 500 vuelo
+
+
+
+//INSERT
+//Insertamos una nueva ruta
+insert into ruta (ID_Ruta, Aeropuerto_Origen, Aeropuerto_Destino, Pais_Origen, Pais_Destino, Fecha_Ida, Fecha_Vuelta, Hora_Salida, Hora_Vuelta) values (1616, 'Aeropuerto de Chile', 'Aeropuerto de Uruguay', 'Chile', 'Uruguay', '2021-12-1', '2022-02-1', '00:00', '1:30');
+
+//Insertamos un nuevo vuelo
+insert into vuelo (ID_Vuelo, ID_Ruta, modeloAvion, Capacidad) values (686, 1616, 'Boeing 727', 50); 
+
+//Insertamos un nuevo pasaje
+insert into pasaje (ID_Pasaje, ID_Vuelo, Clase, Asiento, Valor) values (80686, 686, 'Economica', 69, 300000);
+
+
+
+//DELETE
+//Eliminamos el pasaje anterior creado
+delete from pasaje where ID_Pasaje = 80686;
+
+//Eliminamos el vuelo anterior creado
+delete from vuelo where ID_Vuelo = 686;
+
+
+//UPDATE
+//Actualizamos el nombre generico del aeropuerto de Chile al nombre real
+update ruta set Aeropuerto_Origen = 'A.Inter.Arturo Merino Benítez' where Aeropuerto_Origen = 'Aeropuerto de Chile';
+
+//Actualizamos los antiguos Boeing 747 por los modernos Boeing 777
+update vuelo set modeloAvion = 'Boeing 777' where modeloAvion = 'Boeing 747';
+
+
+//CREATE (No solicidato, pero lo usamos para crear una tabla generica y no alterar la BD en si)
+create table TablaGenerica (
+    -> nombre varchar(20) NOT NULL,
+    -> apellido varchar(20) NOT NULL,
+    -> edad int NOT NULL,
+    -> telefono int NOT NULL);
+
+
+//ALTER
+//Agregamos una nueva columna a TablaGenerica, esta aparecerá al inicio
+alter table TablaGenerica add Rut varchar(10) NOT NULL first;
+
+//Asignamos la nueva columna como Primary Key
+alter table TablaGenerica add primary key (Rut);
+
+
+//DROP
+//Finalmente Eliminamos la tabla generica creada
+drop table TablaGenerica;
